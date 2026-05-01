@@ -40,7 +40,8 @@ class SharedResources {
     
     // TODO #1: Add a ReentrantLock(s) here to protect critical sections
     // Example: public static final ReentrantLock lock = new ReentrantLock();
-            // Lock for protecting shared counters
+    // Added lock to protect shared counters    
+    // Lock for protecting shared counters
         public static final ReentrantLock counterLock = new ReentrantLock();
     
     // TODO #2: Add a Semaphore to limit concurrent process execution
@@ -50,7 +51,8 @@ class SharedResources {
     public static void incrementContextSwitch() {
         // TODO: Protect this critical section with a lock
         // RACE CONDITION: Multiple threads might read and write simultaneously!
-             counterLock.lock();
+        // Protect contextSwitchCount from race condition  
+        counterLock.lock();
             try {
                 contextSwitchCount++;
             } finally {
@@ -61,6 +63,7 @@ class SharedResources {
     // Method to increment completed process counter
     public static void incrementCompletedProcess() {
         // TODO: Protect this critical section with a lock
+        // Protect completedProcessCount from race condition
          counterLock.lock();
         try {
             completedProcessCount++;
@@ -72,6 +75,7 @@ class SharedResources {
     // Method to add waiting time
     public static void addWaitingTime(long time) {
         // TODO: Protect this critical section with a lock
+        // Protect totalWaitingTime from race condition
          counterLock.lock();
         try {
             totalWaitingTime += time;
