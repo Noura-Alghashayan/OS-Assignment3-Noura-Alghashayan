@@ -426,30 +426,44 @@ Synchronization operates similarly in programming. Similar to a key, locks force
 ## Part 6: GitHub Repository Information
 
 **Repository URL**: 
+https://github.com/Noura-Alghashayan/OS-Assignment3-Noura-Alghashayan.git
 
-**Number of commits**: 
+**Number of commits**:
+14
 
 **Commit messages**: 
-1. 
-2. 
-3. 
-4. 
+1. Set my student ID
+2. Add ReentrantLock import
+3. Add Semaphore import
+4. Add counter lock for shared variables
+5. Add comments for counter lock implementation
+6. Add log lock for execution log
+7. Add CPU semaphore for process synchronization
+8. Add semaphore to runToCompletion method
+9. Organize semaphore under TODO section
+10. Complete Part 1: Development Log documentation
+11. Complete Part 2: Technical Questions 
+12. Complete Part 3: Synchronization Analysis
+13. Complete Part 4: Testing and Verification
+14. Complete Part 5: Reflection and Learning
 
 ---
 
 ## Summary
 
 **Total time spent on assignment**: 
+Approximately 7–8 hours
 
 **Key takeaways**: 
-1. 
-2. 
-3. 
+1. In multithreading, synchronization is required to safeguard shared resources.  
+2. In crucial areas, ReentrantLock helps avoid race situations. 
+3. Controlling access to scarce resources, such as CPU, can be accomplished by semaphores.
 
 **Most challenging aspect**: 
+Understanding where to put synchronization mechanisms and how to use locks and semaphores correctly without making mistakes was the most difficult element.
 
 **What I'm most proud of**: 
-
+I am most proud of successfully implementing synchronization, testing the program, and completing all parts of the assignment with correct results.
 ---
 
 **End of Documentation**
