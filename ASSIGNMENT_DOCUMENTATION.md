@@ -126,8 +126,18 @@ I ran the program's final version to make sure it printed the statistics, finish
 - What incorrect behavior could occur?
 
 **Your Answer**:
+There are two race conditions in the original code. The first one occurs in the shared counter variables such as contextSwitchCount, completedProcessCount, and totalWaitingTime. In the original code, operations like:
 
-[Your answer here - 4-6 sentences with code examples]
+contextSwitchCount++;
+totalWaitingTime += time;
+
+were executed by multiple threads without synchronization. These operations are not atomic, so if two threads update the same variable at the same time, one update may be lost, leading to incorrect final results.
+
+The second race condition occurs in the shared executionLog, which is implemented as an ArrayList. In the original code, the following line was not protected:
+
+executionLog.add(message);
+
+Since ArrayList is not thread-safe, multiple threads adding elements at the same time can cause inconsistent data or even runtime errors like ConcurrentModificationException.
 
 ---
 
@@ -135,8 +145,9 @@ I ran the program's final version to make sure it printed the statistics, finish
 **Q**: Explain the difference between ReentrantLock and Semaphore. Where did you use each in your code and why?
 
 **Your Answer**:
+A ReentrantLock is  used to safeguard crucial areas where shared data is altered. It guarantees that a single thread can only access that region at a time. ReentrantLock was utilized in my implementation to safeguard the executionLog and shared counter variables, allowing for safe modifications to these shared resources.
 
-[Your answer here - explain your implementation choices]
+A semaphore is used to manage who has access to a resource. In my code, a single CPU was represented by a semaphore with one permit. This mimics the operation of a real CPU by limiting the number of processes that can run simultaneously. To manage CPU access, I employed cpuSemaphore.acquire() prior to execution and cpuSemaphore.release() following execution.
 
 ---
 
@@ -144,8 +155,11 @@ I ran the program's final version to make sure it printed the statistics, finish
 **Q**: What is deadlock? Explain TWO prevention techniques and what you did to prevent deadlocks in your code.
 
 **Your Answer**:
+When two or more threads are waiting for one another to release resources and none of them can proceed with execution, this is known as deadlock. Consequently, the program ceases to advance.
 
-[Your answer here - reference try-finally blocks, lock ordering, etc.]
+Always releasing locks and resources inside a finally block is one way to avoid deadlock. In order to ensure that ReentrantLock and Semaphore are always released, even in the event of an error, I made sure to release both inside finally blocks.
+
+Keeping critical sections short is another tactic. I limited the use of locks in my solution to quick tasks like writing a log entry or updating counters. This lessens the likelihood of blocking other threads and the amount of time a thread retains a lock.
 
 ---
 
@@ -157,8 +171,9 @@ I ran the program's final version to make sure it printed the statistics, finish
 - Given that the three counters are independent, which approach provides better concurrency and why?
 
 **Your Answer**:
+The three shared counter variables, for Task 1 contextSwitchCount, completedProcessCount, and totalWaitingTime—were protected by a single lock called counterLock. Since multiple shared variables are protected by a single lock, this locking strategy is coarse-grained.
 
-[Your answer here - explain coarse-grained vs fine-grained locking, independence of counters, concurrency implications. Show understanding of when to use each approach. 5-8 sentences expected.]
+I went with this strategy since it is more straightforward, manageable, and appropriate for this task. Because only one counter update may occur at a time, coarse-grained locking has the drawback of potentially lowering concurrency. Because the counters are independent, fine-grained locking, which employs a different lock for each counter, can offer greater concurrency. However, utilizing a single lock is obvious, secure, and sufficient for this simulation because these counter actions are so brief.
 
 ---
 
