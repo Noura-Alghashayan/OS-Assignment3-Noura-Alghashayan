@@ -1,7 +1,7 @@
 # Assignment 3 - Complete Documentation
 
-**Student Name**: [Your Full Name]  
-**Student ID**: [Your ID]  
+**Student Name**: Noura Thamer Alghashayan   
+**Student ID**: 445051981 
 **Date Submitted**: [Submission Date]
 
 ---
@@ -31,69 +31,90 @@
 
 Document your development process with **minimum 3 entries** showing progression:
 
-### Entry 1 - [Date, Time]
+### Entry 1 -  May 1, 2026 - 2:02 PM
 **What I implemented**: 
+I began by going over the assignment specifications and the starting code. I performed the initial commit and updated the student ID in SchedulerSimulationSync.java to my real student ID.
 
 **Challenges encountered**: 
+The first difficulty was figuring out which factors would be impacted by race conditions and where the shared resources were.
 
 **How I solved it**: 
+I located the common variables, such as contextSwitchCount, completedProcessCount, totalWaitingTime , and executionLog , within the SharedResources class.
 
 **Testing approach**: 
+After modifying the student ID, I ran the application to confirm that the code was still appropriately built and executed.
 
 **Time spent**: 
-
+25 minutes
 ---
 
-### Entry 2 - [Date, Time]
+### Entry 2 -  May 1, 2026 - 2:25 PM
 **What I implemented**: 
+I included the imports that are needed for both Semaphore and ReentrantLock. In order to safeguard shared counter variables, I then built a counterLock.
 
 **Challenges encountered**: 
+I needed to know why a race scenario may still occur when basic variables like contextSwitchCount++ are incremented.
 
 **How I solved it**: 
+I used counterLock.lock() and counterLock.unlock() inside of try-finally blocks to safeguard the counter update activities.
 
 **Testing approach**: 
+I ran the software and verified that the synchronization statistics were still accurately reported in the output.
 
 **Time spent**: 
-
+ 9 minutes
 ---
 
-### Entry 3 - [Date, Time]
+### Entry 3 - May 1, 2026 - 2:34 PM
 **What I implemented**: 
+To safeguard the shared executionLog ArrayList, I introduced a separate logLock.
 
 **Challenges encountered**: 
+The executionLog is not thread-safe because it is a ArrayList. When many threads write to it simultaneously,
+ a ConcurrentModificationException or inconsistent log entries may result.
 
 **How I solved it**: 
+To ensure that only one thread changes the list at a time, I used a different ReentrantLock called logLock  around executionLog.add(message).
 
 **Testing approach**: 
+I ran the application several times to make sure the execution log summary showed up without any errors.
 
 **Time spent**: 
-
+ 14 minutes
 ---
 
-### Entry 4 - [Date, Time]
+### Entry 4 - May 1, 2026 - 2:48 PM
 **What I implemented**: 
+To manage CPU access, I created a binary semaphore called cpuSemaphore with a single permit.
 
 **Challenges encountered**: 
+Using cpuSemaphore.acquire() to handle InterruptedException was the primary challenge.
 
 **How I solved it**: 
+To prevent deadlock, I released the semaphore inside a finally block and used a try-catch block for the acquire().
 
 **Testing approach**: 
+I ran the software and confirmed that it finished correctly and that each process ran one at a time.
 
 **Time spent**: 
-
+20 minutes
 ---
 
-### Entry 5 - [Date, Time]
+### Entry 5 - May 1, 2026 - 3:08 PM
 **What I implemented**: 
+In addition to adding semaphore protection to runToCompletion(), I examined the repository visibility, commit history, and final output.
 
 **Challenges encountered**: 
+In addition to the standard run() function, I had to ensure that the semaphore protected the final process execution.
 
 **How I solved it**: 
+At the start of runToCompletion(), I inserted cpuSemaphore.acquire(), which I then released in a finally block.
 
 **Testing approach**: 
+I ran the program's final version to make sure it printed the statistics, finished all processes, and didn't display synchronization issues.
 
 **Time spent**: 
-
+ 42 minutes
 ---
 
 ## Part 2: Technical Questions (1 mark)
