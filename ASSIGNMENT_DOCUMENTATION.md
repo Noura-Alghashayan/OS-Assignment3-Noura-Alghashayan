@@ -182,52 +182,118 @@ I went with this strategy since it is more straightforward, manageable, and appr
 ### Critical Section #1: Counter Variables
 
 **Which variables**: 
+contextSwitchCount, completedProcessCount, and totalWaitingTime.
 
 **Why they need protection**: 
+These variables are shared between multiple process threads. If more than one thread updates them at the same time, the final values may become incorrect because operations like incrementing or adding are not atomic.
 
 **Synchronization mechanism used**: 
+I used a ReentrantLock called counterLock.
 
 **Code snippet**:
 ```java
-// Paste your implementation here
+public static final ReentrantLock counterLock = new ReentrantLock();
+
+public static void incrementContextSwitch() {
+    counterLock.lock();
+    try {
+        contextSwitchCount++;
+    } finally {
+        counterLock.unlock();
+    }
+}
+
+public static void incrementCompletedProcess() {
+    counterLock.lock();
+    try {
+        completedProcessCount++;
+    } finally {
+        counterLock.unlock();
+    }
+}
+
+public static void addWaitingTime(long time) {
+    counterLock.lock();
+    try {
+        totalWaitingTime += time;
+    } finally {
+        counterLock.unlock();
+    }
+}
 ```
 
 **Justification**: 
+The counterLock ensures that only one thread can update the shared counter variables at a time. This prevents lost updates and keeps the final synchronization statistics accurate.
 
 ---
 
 ### Critical Section #2: Execution Log
 
 **What resource**: 
+executionLog (ArrayList)
 
 **Why it needs protection**: 
+The executionLog is shared between multiple threads, and ArrayList is not thread-safe. If multiple threads add elements at the same time, it can lead to inconsistent data or runtime errors such as ConcurrentModificationException.
 
 **Synchronization mechanism used**: 
+I used a separate ReentrantLock called logLock.
 
 **Code snippet**:
 ```java
-// Paste your implementation here
+public static final ReentrantLock logLock = new ReentrantLock();
+
+public static void logExecution(String message) {  
+    logLock.lock();  
+    try {  
+        executionLog.add(message);  
+    } finally {  
+        logLock.unlock();  
+    }  
+}
 ```
 
 **Justification**: 
+Using a separate lock for the execution log ensures that only one thread can modify the log at a time. This prevents data corruption and allows safe logging of process execution steps.
 
 ---
 
 ### Critical Section #3: CPU Semaphore
 
 **Purpose of semaphore**: 
+The purpose of the semaphore is to control access to the simulated CPU. It makes sure that only one process can execute on the CPU at a time.
+
 
 **Number of permits and why**: 
+I used one permit because the simulation represents a single CPU. Using one permit makes the semaphore work like a binary semaphore.
 
 **Where implemented**: 
+The semaphore was declared in the SharedResources class and used in both run() and runToCompletion().
 
 **Code snippet**:
 ```java
-// Paste your implementation here
+public static final Semaphore cpuSemaphore = new Semaphore(1);
+
+boolean acquired = false;
+
+try {
+    try {
+        SharedResources.cpuSemaphore.acquire();
+        acquired = true;
+    } catch (InterruptedException e) {
+        e.printStackTrace();
+    }
+
+    // process execution code
+
+} finally {
+    if (acquired) {
+        SharedResources.cpuSemaphore.release();
+    }
+}
 ```
 
 **Effect on program behavior**: 
-
+The semaphore prevents more than one process from entering the CPU execution section at the same time. This keeps the scheduler behavior consistent and avoids concurrent CPU access.
 ---
 
 ## Part 4: Testing and Verification (2 marks)
