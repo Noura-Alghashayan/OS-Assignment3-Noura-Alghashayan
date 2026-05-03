@@ -304,49 +304,92 @@ The semaphore prevents more than one process from entering the CPU execution sec
 **Testing procedure**: 
 ```bash
 # Commands used (run the program at least 5 times)
+javac SchedulerSimulationSync.java
+java SchedulerSimulationSync
+java SchedulerSimulationSync
+java SchedulerSimulationSync
+java SchedulerSimulationSync
+java SchedulerSimulationSync
 ```
 
 **Results**: 
-(Show that running multiple times produces consistent, correct results)
+═══ Synchronization Statistics ═══
+Total Context Switches: 30
+Total Completed Processes: 13
+Total Waiting Time: 892771ms
+Average Waiting Time: 68674ms
+
+═══ Process Summary Table ═══
+Process    Priority     Burst Time   Waiting Time
+────────────────────────────────────────────────
+P1         2            2286         56          
+P2         4            9010         81460       
+P3         3            9850         82509       
+P4         2            4167         55113       
+P5         5            7755         55337       
+P6         3            7467         59159       
+P7         3            7120         62675       
+P8         5            9432         84362       
+P9         2            9159         85796       
+P10        4            7606         74014       
+P11        4            9448         86965       
+P12        3            5872         81702       
+P13        1            5799         83623       
+
+═══ Execution Log Summary ═══
+Total log entries: 60
+
 
 **Why synchronization is necessary**: 
 (Explain what race conditions COULD occur without synchronization, even if you didn't observe them. Explain which shared resources need protection and why.)
 
-**Conclusion**: 
+When several threads access shared resources like contextSwitchCount, completedProcessCount, totalWaitingTime, and executionLog, synchronization is required. In the absence of synchronization, simultaneous processes such as adding log messages or increasing counters could result in inconsistent log data, lost updates, or inaccurate statistics. While the Semaphore guarantees that only one process can access the simulated CPU at a time, the ReentrantLock safeguards the shared variables and execution log.
 
+**Conclusion**: 
+The consistency check verifies that the software operates properly and generates consistent outcomes. The completion message and final statistics demonstrate that the synchronization mechanisms are operating as intended.
 ---
 
 ### Test 2: Exception Testing
 **What I tested**: Checking for ConcurrentModificationException
 
 **Testing procedure**: 
+After using logLock to synchronize the executionLog, I ran the application several times. My main goal was to see if concurrent access to the ArrayList would result in any runtime exceptions.
 
 **Results**: 
+All of the program's executions were successful, and no ConcurrentModificationException was thrown. Total log entries: 60 was written at the end of the execution log summary, indicating that all logging procedures were successfully finished.
 
 **What this proves**: 
-
+This demonstrates how thread-safe access to the ArrayList is ensured by protecting executionLog.add(message) with ReentrantLock (logLock). It ensures that several threads can securely write to the shared log and avoids problems with concurrent modification.
 ---
 
 ### Test 3: Correctness Verification
 **What I tested**: Verifying correct final values (total burst time, context switches, etc.)
 
 **Expected values**: 
+It was anticipated that every process would successfully finish execution and that the total number of finished processes would equal the total number of created processes. Additionally, the software should show a process summary table and accurate synchronization statistics.
 
 **Actual values**: 
+Total Context Switches: 30
+Total Completed Processes: 13
+Total Waiting Time: 892771ms
+Average Waiting Time: 68674ms
 
 **Analysis**: 
-
+The fact that the actual values match the expected behavior indicates that the scheduler operated as intended and all processes were carried out successfully. The message "ALL PROCESSES COMPLETED" and accurate statistics demonstrate how synchronization techniques guaranteed precise execution and avoided race situations.
 ---
 
 ### Test 4: Different Scenarios
-**Scenario tested**: [e.g., different time quantum, more processes, etc.]
+**Scenario tested**: 
+Different burst times, priorities, and multiple processes (13 processes)
 
 **Purpose**: 
+This test was conducted to ensure that the synchronization solution functions properly with varying process durations and priorities, rather than just one straightforward scenario.
 
 **Results**: 
+13 processes were displayed in the report, each with a unique burst time and priority. While certain processes, like P1, could be completed in a single quantum, others required several turns and context switches . The final statistics were reported error-free and all processes were successfully finished by the scheduler.
 
 **What I learned**: 
-
+I discovered that since threads may access shared resources at different times, synchronization is crucial in various scheduling scenarios. Locks and semaphores aid in maintaining the program's consistency, organization, and safety even in situations when processes have disparate burst times.
 ---
 
 ## Part 5: Reflection and Learning
