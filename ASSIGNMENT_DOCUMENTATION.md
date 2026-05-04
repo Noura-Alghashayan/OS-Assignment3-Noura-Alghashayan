@@ -2,7 +2,7 @@
 
 **Student Name**: Noura Thamer Alghashayan   
 **Student ID**: 445051981 
-**Date Submitted**: [Submission Date]
+**Date Submitted**:  May 4, 2026
 
 ---
 
@@ -14,16 +14,16 @@
 > Set sharing to "Anyone with the link can view".
 > Test the link in incognito/private mode before submitting.
 
-**Video Link**: [Paste your personal Gmail Google Drive link here]
+**Video Link**: https://drive.google.com/file/d/1yb98p0fOBrTQ4v_tuP7i5hi6ppRlV197/view?usp=sharing
 
-**Video filename**: `[YourStudentID]_Assignment3_Synchronization.mp4`
+**Video filename**: `445051981_Assignment3_Synchronization.mp4`
 
 **Verification**:
-- [ ] Link is accessible (tested in incognito mode)
-- [ ] Video is 3-5 minutes long
-- [ ] Video shows code walkthrough and commits
-- [ ] Video has clear audio
-- [ ] Uploaded to PERSONAL Gmail (not @std.psau.edu.sa)
+- [x] Link is accessible (tested in incognito mode)
+- [x] Video is 3-5 minutes long
+- [x] Video shows code walkthrough and commits
+- [x] Video has clear audio
+- [x] Uploaded to PERSONAL Gmail (not @std.psau.edu.sa)
 
 ---
 
@@ -429,7 +429,7 @@ Synchronization operates similarly in programming. Similar to a key, locks force
 https://github.com/Noura-Alghashayan/OS-Assignment3-Noura-Alghashayan.git
 
 **Number of commits**:
-14
+15
 
 **Commit messages**: 
 1. Set my student ID
@@ -446,6 +446,7 @@ https://github.com/Noura-Alghashayan/OS-Assignment3-Noura-Alghashayan.git
 12. Complete Part 3: Synchronization Analysis
 13. Complete Part 4: Testing and Verification
 14. Complete Part 5: Reflection and Learning
+15. Complete Part 6 
 
 ---
 
